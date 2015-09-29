@@ -41,3 +41,6 @@ composer install
 
 #create elasticsearch index
 curl -XPUT 'localhost:9200/solicitacoes?pretty'
+
+#start bot
+nohup php /var/www/bot.php &
