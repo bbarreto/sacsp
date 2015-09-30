@@ -2,11 +2,13 @@
 
 include("config.php");
 
-for ($i=12805507;$i<=12805907;$i++):
+$solicitacao_id = 12814652;
+
+while ($solicitacao_id>0):
 
 	//consulta impressao
 	$impressao = call('http://sac.prefeitura.sp.gov.br/Consulta_Numero.asp', 'GET', [
-		'txtSolNum'=>$i
+		'txtSolNum'=>$solicitacao_id
 	]);
 
 	$impressao = utf8_encode($impressao);
@@ -83,13 +85,18 @@ for ($i=12805507;$i<=12805907;$i++):
 		endif;
 	endforeach;
 
+	if (!isset($resultado['id'])):
+		$solicitacao_id++;
+		continue;
+	endif;
+
 	if (count($providencias)>1):
 		$resultado['providencias'] = trim($providencias[1][0]);
 	endif;
 
-	$solicitacao = array(
-		"id"=>isset($resultado['id'])?$resultado['id']:null, 
-		"momento"=>isset($resultado['momento'])?$resultado['momento']:null, 
+	$solicitacao = [
+		"_id"=>isset($resultado['id'])?$resultado['id']:null, 
+		"_timestamp"=>isset($resultado['momento'])?date("Y-m-d\TH:i:s", $resultado['momento']):null, 
 		"canal"=>isset($resultado['canal'])?$resultado['canal']:null, 
 		"endereco"=>isset($resultado['endereco'])?$resultado['endereco']:null, 
 		"referencia"=>isset($resultado['referencia'])?$resultado['referencia']:null, 
@@ -103,15 +110,22 @@ for ($i=12805507;$i<=12805907;$i++):
 		"supervisao"=>isset($resultado['supervisao'])?$resultado['supervisao']:null, 
 		"orgao"=>isset($resultado['orgao'])?$resultado['orgao']:null, 
 		"situacao"=>isset($resultado['situacao'])?$resultado['situacao']:null, 
-		"conclusao"=>isset($resultado['conclusao'])?$resultado['conclusao']:null, 
+		"conclusao"=>isset($resultado['conclusao'])?date("Y-m-d\TH:i:s", $resultado['conclusao']):null, 
 		"providencias"=>isset($resultado['providencias'])?$resultado['providencias']:null
-	);
+	];
 
-	$insert = call('http://localhost:9200/solicitacoes/solicitacao/'.$solicitacao['id'], 'PUT', [], [], json_encode($solicitacao));
+	$response = $db->index([
+		'index'=>'solicitacoes',
+		'type'=>'solicitacao',
+		'id'=>$resultado['id'],
+		'body'=>$solicitacao
+	]);
 
-	print_r($insert);
+	print_r($response);
 
-endfor;
+	$solicitacao_id++;
+
+endwhile;
 
 
 function call($url, $method='GET', $args=null, $headers=array(), $data=null) {
@@ -166,7 +180,5 @@ function call($url, $method='GET', $args=null, $headers=array(), $data=null) {
 		/** Se não executou, retorna erro */
 		return false;
 	}
-
-	
 
 }
