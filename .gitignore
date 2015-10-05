@@ -4,3 +4,4 @@ vendor/
 components/
 config.php
 .vagrant
+nohup.out
