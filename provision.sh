@@ -34,7 +34,7 @@ else
     sudo /usr/bin/cpz self-update
 fi
 
-cd /var/www/html
+cd /var/www
 
 #install project dependencies
 composer install
