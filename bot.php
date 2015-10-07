@@ -2,7 +2,22 @@
 
 include("config.php");
 
-$solicitacao_id = 12814652;
+$response = $db->search([
+    'index' => 'solicitacoes',
+    'type' => 'solicitacao',
+    'size' => 1,
+    'body' => [
+    	'sort' => [
+        	[ "timestamp" => "desc" ]
+    	]
+    ]
+]);
+
+if (isset($response['hits']['hits'][0]['_id'])):
+	$solicitacao_id = $response['hits']['hits'][0]['_id']+1;
+else:
+	$solicitacao_id = 12814652;
+endif;
 
 while ($solicitacao_id>0):
 
