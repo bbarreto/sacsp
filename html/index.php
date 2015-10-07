@@ -2,23 +2,19 @@
 
 include("../config.php");
 
-$params = [
+$agregacoes = $db->search([
     'index' => 'solicitacoes',
     'type' => 'solicitacao',
     'size' => 0,
     'body' => [
-
 		"aggs"=> [
-			"group_by_subprefeitura"=> [
-				"terms"=> [
-					"field"=> "subprefeitura"
-				]
-			]
+			"subprefeitura"=>["terms"=>["field"=>"subprefeitura"]],
+			"canal"=>["terms"=>["field"=>"canal"]],
+			"assunto"=>["terms"=>["field"=>"assunto"]],
+			"orgao"=>["terms"=>["field"=>"orgao"]]
 		],
 
     ]
-];
+]);
 
-$response = $db->search($params);
-print '<meta charset="utf-8"><pre>';
-print_r($response);
+include("template/home.phtml");
