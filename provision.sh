@@ -10,7 +10,7 @@ then
     sudo aptitude upgrade -y
     sudo locale-gen en_US en_US.UTF-8 pt_BR pt_BR.UTF-8
     sudo dpkg-reconfigure locales
-    sudo aptitude install htop php5 php5-cli php5-intl php5-curl php5-mysql php5-pdo -y
+    sudo aptitude install php5 php5-cli php5-intl php5-curl -y
 
     #install elasticsearch
     sudo aptitude install openjdk-7-jre-headless -y
@@ -36,6 +36,8 @@ fi
 
 cd /var/www
 
+rm html/index.htm
+
 #install project dependencies
 composer install
 
@@ -46,7 +48,8 @@ curl -XPUT -d '{"properties":{"assunto":{"type":"string","index":"not_analyzed"}
 curl -XPUT -d '{"properties":{"bairro":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
 curl -XPUT -d '{"properties":{"canal":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
 curl -XPUT -d '{"properties":{"cep":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"conclusao":{"type":"date","format":"dateOptionalTime" ,"index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
+curl -XPUT -d '{"properties":{"timestamp":{"type":"date","format":"dateOptionalTime"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
+curl -XPUT -d '{"properties":{"conclusao":{"type":"date","format":"dateOptionalTime"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
 curl -XPUT -d '{"properties":{"endereco":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
 curl -XPUT -d '{"properties":{"especificacao":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
 curl -XPUT -d '{"properties":{"orgao":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'

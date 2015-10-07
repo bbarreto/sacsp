@@ -96,7 +96,7 @@ while ($solicitacao_id>0):
 
 	$solicitacao = [
 		"_id"=>isset($resultado['id'])?$resultado['id']:null, 
-		"_timestamp"=>isset($resultado['momento'])?date("Y-m-d\TH:i:s", $resultado['momento']):null, 
+		"timestamp"=>isset($resultado['momento'])?date("Y-m-d\TH:i:s", $resultado['momento']):null, 
 		"canal"=>isset($resultado['canal'])?$resultado['canal']:null, 
 		"endereco"=>isset($resultado['endereco'])?$resultado['endereco']:null, 
 		"referencia"=>isset($resultado['referencia'])?$resultado['referencia']:null, 
