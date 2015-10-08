@@ -1,0 +1,15 @@
+<?php include("header.phtml"); ?>
+
+  <div class="top10 full" id="graph7">
+    <h2><?php print $_GET['assunto'] ?></h2>
+    <table>
+      <?php foreach(array_reverse($query['aggregations']['graphDays']['buckets']) as $item): ?>
+      <tr>
+        <td class="titulo"><?php print date("d/m/Y H\h", strtotime($item['key_as_string'])) ?></td>
+        <td class="total"><?php print $item['doc_count'] ?></td>
+      </tr>
+      <?php endforeach; ?>
+    </table>
+  </div>
+
+<?php include("footer.phtml"); ?>

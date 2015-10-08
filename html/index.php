@@ -22,10 +22,10 @@ $agregacoes = $db->search([
     		[ "timestamp"=>"desc" ]
     	],
 		"aggs"=> [
-			"subprefeitura"=>["terms"=>["field"=>"subprefeitura"]],
-			"canal"=>["terms"=>["field"=>"canal"]],
-			"assunto"=>["terms"=>["field"=>"assunto"]],
-			"orgao"=>["terms"=>["field"=>"orgao"]]
+			"subprefeitura"=>["terms"=>["field"=>"subprefeitura","size"=>10]],
+			"canal"=>["terms"=>["field"=>"canal","size"=>10]],
+			"assunto"=>["terms"=>["field"=>"assunto","size"=>10]],
+			"orgao"=>["terms"=>["field"=>"orgao","size"=>10]]
 		],
 
     ]

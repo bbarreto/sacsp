@@ -1,167 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>SACSP - Sistema de estatística e acompanhamento das reclamações de munícipes na cidade de São Paulo</title>
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-<meta property="og:title" content="SACSP" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="http://sacsp.info/" />
-<meta property="og:image" content="http://sacsp.info/images/avatar.jpg" />
-<meta property="og:description" content="Sistema de estatística e acompanhamento das reclamações de munícipes na cidade de São Paulo" />
-<style>
-html, * {
-  margin: 0;
-  padding: 0px;
-}
-
-body {
-  position: absolute;
-  top: 0;
-  left: 0;
-  overflow: auto;
-  width: 100%;
-  height: 100%;
-  font-family: sans-serif;
-  font-size: small;
-}
-
-#canvas {
-  position: relative;
-  padding: 10px 0;
-  width: 990px;
-  margin: auto;
-}
-
-h1 {
-  position: relative;
-  width: 316px;
-  margin: 0 auto 20px;
-  height: 130px;
-}
-
-h1 a {
-  display: block;
-  position: absolute;
-  width: 100%;
-  top: 0;
-  left: 0;
-  height: 100%;
-  text-indent: -1000px;
-  overflow: hidden;
-  background: url(images/logo.png) no-repeat left top;
-  background-size: contain;
-}
-
-.clear {
-  display: block;
-  clear: both;
-}
-
-.aviso {
-  position: relative;
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 4px;
-  border: 1px #B3B3B3 solid;
-  background: #F6FC83;
-  text-align: center;
-  width: -webkit-calc(100% - 32px);
-  width: calc(100% - 32px);
-}
-
-.filters {
-  position: relative;
-  padding: 10px;
-  border: 1px #B3B3B3 solid;
-  margin: 0 0 10px 0;
-  width: -webkit-calc(100% - 32px);
-  width: calc(100% - 32px);
-  border-radius: 4px;
-}
-
-.filters form input {
-  padding: 4px;
-  margin-right: 10px;
-}
-
-.filters form button {
-  padding: 4px 10px;
-}
-
-.top10 {
-  position: relative;
-  padding: 10px;
-  border: 1px #B3B3B3 solid;
-  margin: 0 10px 10px 0;
-  width: -webkit-calc(50% - 32px);
-  width: calc(50% - 32px);
-  float: left;
-  border-radius: 4px;
-}
-
-.top10 h2 {
-  margin: 0 0 15px 5px;
-  color: #dc0000;
-}
-
-.top10 table {
-  position: relative;
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.top10 table tr:hover {
-  background: #eee;
-}
-
-.top10 table tr td {
-  padding: 5px;
-  border-bottom: 1px #eee solid;
-  cursor: default;
-}
-
-.top10 table tr td.total {
-  text-align: right;
-}
-
-#rodape {
-  position: relative;
-  display: block;
-  clear: both;
-  padding: 20px 10px;
-  text-align: center;
-  color: #7d7d7d;
-}
-
-#rodape p.links {
-  margin-top: 10px;
-}
-
-#rodape p.links a {
-  display: inline-block;
-  margin-right: 10px;
-  color: #7d7d7d;
-}
-</style>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script>
-$(window).ready(function () {
-
-  $("#rodape a.contribua").click(function () {
-    $("#pagseguro").submit();
-    return false;
-  });
-
-});
-
-</script>
-</head>
-<body>
-
-<div id="canvas">
-
-  <h1><a href="http://sacsp.info">SACSP</a></h1>
+<?php include("header.phtml"); ?>
 
   <div class="aviso">
   Contabilizando <?php print number_format($agregacoes['hits']['total'], 0, ",", ".") ?> solicitações entre
@@ -174,7 +11,7 @@ $(window).ready(function () {
     <table>
       <?php foreach($agregacoes['aggregations']['assunto']['buckets'] as $assunto): ?>
       <tr>
-        <td class="titulo"><a href="/mapa?assunto=<?php print urlencode($assunto['key']) ?>"><?php print $assunto['key'] ?></a></td>
+        <td class="titulo"><a href="/detalhe.php?assunto=<?php print urlencode($assunto['key']) ?>"><?php print $assunto['key'] ?></a></td>
         <td class="total"><?php print $assunto['doc_count'] ?></td>
       </tr>
       <?php endforeach; ?>
@@ -186,7 +23,7 @@ $(window).ready(function () {
     <table>
       <?php foreach($agregacoes['aggregations']['subprefeitura']['buckets'] as $subprefeitura): ?>
       <tr>
-        <td class="titulo"><a href="/mapa?subprefeitura=<?php print urlencode($subprefeitura['key']) ?>"><?php print isset($subprefeituras_keys[$subprefeitura['key']])?$subprefeituras_keys[$subprefeitura['key']]:$subprefeitura['key']?></a></td>
+        <td class="titulo"><a href="/detalhe.php?subprefeitura=<?php print urlencode($subprefeitura['key']) ?>"><?php print isset($subprefeituras_keys[$subprefeitura['key']])?$subprefeituras_keys[$subprefeitura['key']]:$subprefeitura['key']?></a></td>
         <td class="total"><?php print $subprefeitura['doc_count'] ?></td>
       </tr>
       <?php endforeach; ?>
@@ -200,7 +37,7 @@ $(window).ready(function () {
     <table>
       <?php foreach($agregacoes['aggregations']['orgao']['buckets'] as $orgao): ?>
       <tr>
-        <td class="titulo"><a href="/mapa?orgao=<?php print urlencode($orgao['key']) ?>"><?php print $orgao['key'] ?></a></td>
+        <td class="titulo"><a href="/detalhe.php?orgao=<?php print urlencode($orgao['key']) ?>"><?php print $orgao['key'] ?></a></td>
         <td class="total"><?php print $orgao['doc_count'] ?></td>
       </tr>
       <?php endforeach; ?>
@@ -212,38 +49,11 @@ $(window).ready(function () {
     <table>
       <?php foreach($agregacoes['aggregations']['canal']['buckets'] as $canais): ?>
       <tr>
-        <td class="titulo"><a href="/mapa?canal=<?php print urlencode($canais['key']) ?>"><?php print $canais['key'] ?></a></td>
+        <td class="titulo"><a href="/detalhe.php?canal=<?php print urlencode($canais['key']) ?>"><?php print $canais['key'] ?></a></td>
         <td class="total"><?php print $canais['doc_count'] ?></td>
       </tr>
       <?php endforeach; ?>
     </table>
   </div>
 
-  <div id="rodape">
-    <p><strong>Informações legais: </strong>SACSP não possui associação com a Prefeitura Municipal de São Paulo.
-    Os dados aqui apresentados não são atualizados em tempo real.</p>
-    <p class="links">
-      <a href="/" class="contribua">Faça uma doação</a>
-    </p>
-  </div>
-
-  <form id="pagseguro" target="pagseguro" action="https://pagseguro.uol.com.br/checkout/v2/donation.html" method="post">
-    <input type="hidden" name="receiverEmail" value="bruno@mamulti.com.br" />
-    <input type="hidden" name="currency" value="BRL" />
-  </form>  
-
-</div>
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-2659701-17', 'sacsp.info');
-  ga('send', 'pageview');
-
-</script>
-
-</body>
-</html>
+<?php include("footer.phtml"); ?>
