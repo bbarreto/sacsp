@@ -8,7 +8,7 @@ $query = $db->search([
     'search_type' => 'count',
     'body' => [
         "query" => [
-        "term" => [ "assunto" => $_GET['assunto'] ],
+        "term" => $_GET,
         ],
     	"sort"=> [
     		[ "timestamp"=>"asc" ]
@@ -17,12 +17,20 @@ $query = $db->search([
             "graphDays" => [
     			"date_histogram" => [
                     "field" => "timestamp",
-                    "interval" => "hour"
+                    "interval" => "day",
+                    "format" => "dd/MM/YYYY"
                 ]
             ]
 		],
 
     ]
 ]);
+
+$keys = [];
+$values = [];
+foreach(array_reverse($query['aggregations']['graphDays']['buckets']) as $item):
+    $keys[] = '"'.$item['key_as_string'].'"';
+    $values[] = $item['doc_count'];
+endforeach;
 
 include("template/detalhe.phtml");

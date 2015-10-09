@@ -1,15 +1,37 @@
 <?php include("header.phtml"); ?>
 
   <div class="top10 full" id="graph7">
-    <h2><?php print $_GET['assunto'] ?></h2>
-    <table>
-      <?php foreach(array_reverse($query['aggregations']['graphDays']['buckets']) as $item): ?>
-      <tr>
-        <td class="titulo"><?php print date("d/m/Y H\h", strtotime($item['key_as_string'])) ?></td>
-        <td class="total"><?php print $item['doc_count'] ?></td>
-      </tr>
-      <?php endforeach; ?>
-    </table>
+    <h2>
+    <?php 
+      if (key($_GET)=="subprefeitura"):
+        print $subprefeituras_keys[$_GET["subprefeitura"]];
+      else:
+        print $_GET[key($_GET)];
+      endif;
+    ?></h2>
+    <canvas id="myChart" width="950" height="400"></canvas>
   </div>
+
+<script>
+
+var data = {
+    labels: [ <?php print implode(", ", $keys) ?> ],
+    datasets: [
+        {
+            label: "Solicitações",
+            fillColor: "rgba(194, 0, 0, 0.1)",
+            strokeColor: "#C20000",
+            pointColor: "#C20000",
+            pointStrokeColor: "#C20000",
+            pointHighlightFill: "#C20000",
+            pointHighlightStroke: "#C20000",
+            data: [ <?php print implode(", ", $values); ?> ]
+        }
+    ]
+};
+
+var ctx = document.getElementById("myChart").getContext("2d");
+var myNewChart = new Chart(ctx).Line(data);
+</script>
 
 <?php include("footer.phtml"); ?>
