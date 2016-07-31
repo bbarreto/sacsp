@@ -1,18 +1,160 @@
 <?php
 
-include("config.php");
+include 'config.php';
 
+
+/** Iniciando bot verificando se índice existe. Se não existir, cria e define os mappings */
+if (!$db->indices()->exists(['index'=>'solicitacoes'])):
+	$response = $db->indices()->create([
+		'index'=>'solicitacoes',
+		'body'=>[
+			'mappings' => [
+			    "solicitacao" => [
+			        "properties" => [
+			            "situacao"=> [
+			              "type"=>"string", 
+			              "fields"=> [
+			                "raw"=> [ 
+			                  "type"=>"string",
+			                  "index"=>"not_analyzed"
+			                ]
+			              ]
+			            ],
+			            "orgao"=> [
+			              "type"=>"string", 
+			              "fields"=> [
+			                "raw"=> [ 
+			                  "type"=>"string",
+			                  "index"=>"not_analyzed"
+			                ]
+			              ]
+			            ],
+			            "especificacao"=> [
+			              "type"=>"string", 
+			              "fields"=> [
+			                "raw"=> [ 
+			                  "type"=>"string",
+			                  "index"=>"not_analyzed"
+			                ]
+			              ]
+			            ],
+			            "cep"=> [
+			              "type"=>"string", 
+			              "fields"=> [
+			                "raw"=> [ 
+			                  "type"=>"string",
+			                  "index"=>"not_analyzed"
+			                ]
+			              ]
+			            ],
+			            "assunto"=> [
+			              "type"=>"string", 
+			              "fields"=> [
+			                "raw"=> [ 
+			                  "type"=>"string",
+			                  "index"=>"not_analyzed"
+			                ]
+			              ]
+			            ],
+			            "setor_quadra"=> [
+			              "type"=>"string", 
+			              "fields"=> [
+			                "raw"=> [ 
+			                  "type"=>"string",
+			                  "index"=>"not_analyzed"
+			                ]
+			              ]
+			            ],
+			            "providencias"=> [
+			              "type"=>  "string"
+			            ],
+			            "canal"=> [
+			              "type"=>"string", 
+			              "fields"=> [
+			                "raw"=> [ 
+			                  "type"=>"string",
+			                  "index"=>"not_analyzed"
+			                ]
+			              ]
+			            ],
+			            "pag_guia"=> [
+			              "type"=>"string", 
+			              "fields"=> [
+			                "raw"=> [ 
+			                  "type"=>"string",
+			                  "index"=>"not_analyzed"
+			                ]
+			              ]
+			            ],
+			            "endereco"=> [
+			              "type"=>"string", 
+			              "fields"=> [
+			                "raw"=> [ 
+			                  "type"=>"string",
+			                  "index"=>"not_analyzed"
+			                ]
+			              ]
+			            ],
+			            "supervisao"=> [
+			              "type"=>"string", 
+			              "fields"=> [
+			                "raw"=> [ 
+			                  "type"=>"string",
+			                  "index"=>"not_analyzed"
+			                ]
+			              ]
+			            ],
+			            "bairro"=> [
+			              "type"=>"string", 
+			              "fields"=> [
+			                "raw"=> [ 
+			                  "type"=>"string",
+			                  "index"=>"not_analyzed"
+			                ]
+			              ]
+			            ],
+			            "subprefeitura"=> [
+			              "type"=>"string", 
+			              "fields"=> [
+			                "raw"=> [ 
+			                  "type"=>"string",
+			                  "index"=>"not_analyzed"
+			                ]
+			              ]
+			            ],
+			            "referencia"=> [
+			              "type"=>"string", 
+			              "fields"=> [
+			                "raw"=> [ 
+			                  "type"=>"string",
+			                  "index"=>"not_analyzed"
+			                ]
+			              ]
+			            ],
+			            "conclusao"=> [
+			              "type"=>"date",
+			              "format"=>"yyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"
+			            ]
+			        ]
+			    ]
+			]
+		]
+	]);
+endif;
+
+/** Buscar última solicitação analisada */
 $response = $db->search([
     'index' => 'solicitacoes',
     'type' => 'solicitacao',
     'size' => 1,
     'body' => [
     	'sort' => [
-        	[ "timestamp" => "desc" ]
+        	[ "timestamp" => ['order'=>'desc', 'ignore_unmapped'=>true ] ]
     	]
     ]
 ]);
 
+/** Se for encontrada uma solicitação, começa a partir da próxima */
 if (isset($response['hits']['hits'][0]['_id'])):
 	$solicitacao_id = $response['hits']['hits'][0]['_id']+1;
 else:
@@ -110,7 +252,7 @@ while ($solicitacao_id>0):
 	endif;
 
 	$solicitacao = [
-		"_id"=>isset($resultado['id'])?$resultado['id']:null, 
+		"id"=>isset($resultado['id'])?$resultado['id']:null, 
 		"timestamp"=>isset($resultado['momento'])?date("Y-m-d\TH:i:s", $resultado['momento']):null, 
 		"canal"=>isset($resultado['canal'])?$resultado['canal']:null, 
 		"endereco"=>isset($resultado['endereco'])?$resultado['endereco']:null, 
@@ -125,7 +267,7 @@ while ($solicitacao_id>0):
 		"supervisao"=>isset($resultado['supervisao'])?$resultado['supervisao']:null, 
 		"orgao"=>isset($resultado['orgao'])?$resultado['orgao']:null, 
 		"situacao"=>isset($resultado['situacao'])?$resultado['situacao']:null, 
-		"conclusao"=>isset($resultado['conclusao'])?date("Y-m-d\TH:i:s", $resultado['conclusao']):null, 
+		"conclusao"=>isset($resultado['conclusao'])?date("Y-m-d H:i:s", $resultado['conclusao']):null, 
 		"providencias"=>isset($resultado['providencias'])?$resultado['providencias']:null
 	];
 
@@ -136,7 +278,7 @@ while ($solicitacao_id>0):
 		'body'=>$solicitacao
 	]);
 
-	print_r($response);
+	print_r($solicitacao);
 
 	$solicitacao_id++;
 
