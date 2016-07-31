@@ -14,8 +14,8 @@ then
 
     #install elasticsearch
     sudo aptitude install openjdk-7-jre-headless -y
-    wget https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.1.1.deb
-    sudo dpkg -i elasticsearch-1.1.1.deb
+    wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.3.4/elasticsearch-2.3.4.deb
+    sudo dpkg -i elasticsearch-2.3.4.deb
     sudo service elasticsearch start
 
     sudo a2enmod rewrite
@@ -40,25 +40,6 @@ rm html/index.htm
 
 #install project dependencies
 composer install
-
-#create elasticsearch index
-curl -XPUT 'localhost:9200/solicitacoes?pretty'
-
-curl -XPUT -d '{"properties":{"assunto":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"bairro":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"canal":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"cep":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"timestamp":{"type":"date","format":"dateOptionalTime"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"conclusao":{"type":"date","format":"dateOptionalTime"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"endereco":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"especificacao":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"orgao":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"pag_guia":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"referencia":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"setor_quadra":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"situacao":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"subprefeitura":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
-curl -XPUT -d '{"properties":{"supervisao":{"type":"string","index":"not_analyzed"}}}' 'localhost:9200/solicitacoes/_mapping/solicitacao'
 
 #start bot
 nohup php /var/www/bot.php &

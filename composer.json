@@ -1,5 +1,6 @@
 {
     "require": {
-        "elasticsearch/elasticsearch": "~2.0"
+        "elasticsearch/elasticsearch": "~2.0",
+        "twbs/bootstrap": "4.0.0-alpha.3"
     }
 }

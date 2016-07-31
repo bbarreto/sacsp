@@ -1,59 +1,79 @@
 <?php include("header.phtml"); ?>
 
-  <div class="aviso">
+  <div class="alert alert-info" role="alert">
   Contabilizando <?php print number_format($agregacoes['hits']['total'], 0, ",", ".") ?> solicitações entre
   <?php print date("d/m/Y H\hi", strtotime($data_minima['hits']['hits'][0]['_source']['timestamp'])) ?> até 
   <?php print date("d/m/Y H\hi", strtotime($agregacoes['hits']['hits'][0]['_source']['timestamp'])) ?>.
   </div>
 
-  <div class="top10" id="topAssuntos">
-    <h2>Top assuntos</h2>
-    <table>
-      <?php foreach($agregacoes['aggregations']['assunto']['buckets'] as $assunto): ?>
-      <tr>
-        <td class="titulo"><a href="/detalhe.php?assunto=<?php print urlencode($assunto['key']) ?>"><?php print $assunto['key'] ?></a></td>
-        <td class="total"><?php print $assunto['doc_count'] ?></td>
-      </tr>
-      <?php endforeach; ?>
-    </table>
+  <div class="row m-b-2">
+    <div class="col-md-6" id="topAssuntos">
+      <table class="table table-hover">
+        <thead class="thead-inverse">
+          <tr><th colspan=2>Top Assuntos</th></tr>
+        </thead>
+        <tbody>
+          <?php foreach($agregacoes['aggregations']['assunto']['buckets'] as $assunto): ?>
+          <tr>
+            <td class="titulo"><a href="/detalhe.php?assunto=<?php print urlencode($assunto['key']) ?>"><?php print $assunto['key'] ?></a></td>
+            <td class="total"><?php print $assunto['doc_count'] ?></td>
+          </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-md-6" id="topSubprefeituras">
+      <table class="table table-hover">
+         <thead class="thead-inverse">
+          <tr><th colspan=2>Top Subprefeituras</th></tr>
+        </thead>
+        <tbody>
+        <?php foreach($agregacoes['aggregations']['subprefeitura']['buckets'] as $subprefeitura): ?>
+        <tr>
+          <td class="titulo"><a href="/detalhe.php?subprefeitura=<?php print urlencode($subprefeitura['key']) ?>"><?php print isset($subprefeituras_keys[$subprefeitura['key']])?$subprefeituras_keys[$subprefeitura['key']]:$subprefeitura['key']?></a></td>
+          <td class="total"><?php print $subprefeitura['doc_count'] ?></td>
+        </tr>
+        <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <div class="top10" id="topSubprefeituras">
-    <h2>Top subprefeituras</h2>
-    <table>
-      <?php foreach($agregacoes['aggregations']['subprefeitura']['buckets'] as $subprefeitura): ?>
-      <tr>
-        <td class="titulo"><a href="/detalhe.php?subprefeitura=<?php print urlencode($subprefeitura['key']) ?>"><?php print isset($subprefeituras_keys[$subprefeitura['key']])?$subprefeituras_keys[$subprefeitura['key']]:$subprefeitura['key']?></a></td>
-        <td class="total"><?php print $subprefeitura['doc_count'] ?></td>
-      </tr>
-      <?php endforeach; ?>
-    </table>
-  </div>
+  <div class="row m-b-2">
 
-  <span class="clear"></span>
+    <div class="col-md-6" id="topOrgaos">
+      <table class="table table-hover">
+           <thead class="thead-inverse">
+            <tr><th colspan=2>Top órgãos</th></tr>
+          </thead>
+          <tbody>
+            <?php foreach($agregacoes['aggregations']['orgao']['buckets'] as $orgao): ?>
+            <tr>
+              <td class="titulo"><a href="/detalhe.php?orgao=<?php print urlencode($orgao['key']) ?>"><?php print $orgao['key'] ?></a></td>
+              <td class="total"><?php print $orgao['doc_count'] ?></td>
+            </tr>
+            <?php endforeach; ?>
+          </tbody>
+      </table>
+    </div>  
 
-  <div class="top10" id="topOrgaos">
-    <h2>Top órgãos</h2>
-    <table>
-      <?php foreach($agregacoes['aggregations']['orgao']['buckets'] as $orgao): ?>
-      <tr>
-        <td class="titulo"><a href="/detalhe.php?orgao=<?php print urlencode($orgao['key']) ?>"><?php print $orgao['key'] ?></a></td>
-        <td class="total"><?php print $orgao['doc_count'] ?></td>
-      </tr>
-      <?php endforeach; ?>
-    </table>
-  </div>  
+    <div class="col-md-6" id="topCanais">
+      <table class="table table-hover">
+           <thead class="thead-inverse">
+            <tr><th colspan=2>Canais de entrada</th></tr>
+          </thead>
+          <tbody>
+            <?php foreach($agregacoes['aggregations']['canal']['buckets'] as $canais): ?>
+            <tr>
+              <td class="titulo"><a href="/detalhe.php?canal=<?php print urlencode($canais['key']) ?>"><?php print $canais['key'] ?></a></td>
+              <td class="total"><?php print $canais['doc_count'] ?></td>
+            </tr>
+            <?php endforeach; ?>
+          </tbody>
+      </table>
+    </div>
 
-  <div class="top10" id="topCanais">
-    <h2>Top canais de entrada</h2>
-    <table>
-      <?php foreach($agregacoes['aggregations']['canal']['buckets'] as $canais): ?>
-      <tr>
-        <td class="titulo"><a href="/detalhe.php?canal=<?php print urlencode($canais['key']) ?>"><?php print $canais['key'] ?></a></td>
-        <td class="total"><?php print $canais['doc_count'] ?></td>
-      </tr>
-      <?php endforeach; ?>
-    </table>
   </div>
 
 <?php include("footer.phtml"); ?>
