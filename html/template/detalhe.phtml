@@ -1,37 +1,49 @@
 <?php include("header.phtml"); ?>
 
-  <div class="top10 full" id="graph7">
-    <h2>
-    <?php 
-      if (key($_GET)=="subprefeitura"):
-        print $subprefeituras_keys[$_GET["subprefeitura"]];
-      else:
-        print $_GET[key($_GET)];
-      endif;
-    ?></h2>
-    <canvas id="myChart" width="950" height="400"></canvas>
+  <div class="col-xs-12">
+    <div class="row">
+      <div class="col-xs-12 m-b-2">
+        <h2><?php 
+          if (key($_GET)=="subprefeitura"):
+            print $subprefeituras_keys[$_GET["subprefeitura"]];
+          else:
+            print $_GET[key($_GET)];
+          endif;
+        ?></h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="solicitacoes_por_dia"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="solicitacoes_por_subprefeitura"></div>
+      </div>
+    </div>
   </div>
 
 <script>
-
-var data = {
-    labels: [ <?php print implode(", ", $keys) ?> ],
-    datasets: [
-        {
-            label: "Solicitações",
-            fillColor: "rgba(194, 0, 0, 0.1)",
-            strokeColor: "#C20000",
-            pointColor: "#C20000",
-            pointStrokeColor: "#C20000",
-            pointHighlightFill: "#C20000",
-            pointHighlightStroke: "#C20000",
-            data: [ <?php print implode(", ", $values); ?> ]
-        }
+new Chartist.Line('.solicitacoes_por_dia', {
+    labels: [ <?php print implode(", ", $graficos['graphDays']['keys']) ?> ],
+    series: [
+      [ <?php print implode(", ", $graficos['graphDays']['values']); ?> ]
     ]
-};
+  }, {
+    height: '250px'
+});
 
-var ctx = document.getElementById("myChart").getContext("2d");
-var myNewChart = new Chart(ctx).Line(data);
+new Chartist.Bar('.solicitacoes_por_subprefeitura', {
+    labels: [ <?php print implode(", ", $graficos['graphSubprefeitura']['keys']) ?> ],
+    series: [
+      [ <?php print implode(", ", $graficos['graphSubprefeitura']['values']); ?> ]
+    ]
+  }, {
+    height: '250px'
+});
 </script>
 
 <?php include("footer.phtml"); ?>

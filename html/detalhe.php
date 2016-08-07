@@ -1,6 +1,6 @@
 <?php
 
-include("../config.php");
+include '../config.php';
 
 $query = $db->search([
     'index' => 'solicitacoes',
@@ -8,7 +8,9 @@ $query = $db->search([
     'search_type' => 'count',
     'body' => [
         "query" => [
-        "term" => $_GET,
+        "term" => [
+                'assunto.raw'=>$_GET['assunto']
+            ]
         ],
     	"sort"=> [
     		[ "timestamp"=>"asc" ]
@@ -20,17 +22,30 @@ $query = $db->search([
                     "interval" => "day",
                     "format" => "dd/MM/YYYY"
                 ]
+            ],
+            "graphSubprefeitura" => [
+                "terms" => [
+                    "field" => "subprefeitura.raw",
+                    "size" => 50
+                ]
             ]
 		],
 
     ]
 ]);
 
-$keys = [];
-$values = [];
-foreach(array_reverse($query['aggregations']['graphDays']['buckets']) as $item):
-    $keys[] = '"'.$item['key_as_string'].'"';
-    $values[] = $item['doc_count'];
+$graficos = [];
+foreach($query['aggregations'] as $grafico=>$el):
+    $graficos[$grafico]['keys'] = [];
+    $graficos[$grafico]['values'] = [];
+    foreach($el['buckets'] as $item):
+        if (isset($item['key_as_string'])):
+            $graficos[$grafico]['keys'][] = '"'.$item['key_as_string'].'"';
+        else:
+            $graficos[$grafico]['keys'][] = '"'.$item['key'].'"';
+        endif;
+        $graficos[$grafico]['values'][] = $item['doc_count'];
+    endforeach;
 endforeach;
 
-include("template/detalhe.phtml");
+include 'template/detalhe.phtml';
