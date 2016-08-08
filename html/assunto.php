@@ -2,6 +2,10 @@
 
 include '../config.php';
 
+if (!isset($_GET['assunto'])):
+    header("HTTP/1.0 404 Not Found");die;
+endif;
+
 $query = $db->search([
     'index' => 'solicitacoes',
     'type' => 'solicitacao',
@@ -48,4 +52,4 @@ foreach($query['aggregations'] as $grafico=>$el):
     endforeach;
 endforeach;
 
-include 'template/detalhe.phtml';
+include 'template/assunto.phtml';

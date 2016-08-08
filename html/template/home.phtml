@@ -15,7 +15,7 @@
         <tbody>
           <?php foreach($agregacoes['aggregations']['assunto']['buckets'] as $assunto): ?>
           <tr>
-            <td class="titulo"><a href="/detalhe.php?assunto=<?php print urlencode($assunto['key']) ?>"><?php print $assunto['key'] ?></a></td>
+            <td class="titulo"><a href="/assunto.php?assunto=<?php print urlencode($assunto['key']) ?>"><?php print $assunto['key'] ?></a></td>
             <td class="total"><?php print $assunto['doc_count'] ?></td>
           </tr>
           <?php endforeach; ?>
