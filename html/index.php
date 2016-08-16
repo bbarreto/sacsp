@@ -13,13 +13,13 @@ $data_minima = $db->search([
     ]
 ]);
 
-if (isset($_GET['inicio']) && count(explode("/", $_GET['inicio']))==3):
+if (isset($_GET['inicio']) && count(explode("-", $_GET['inicio']))==3):
     $inicio = strtotime($_GET['inicio'].' 00:00:00');
 else:
     $inicio = strtotime($data_minima['hits']['hits'][0]['_source']['timestamp']);
 endif;
 
-if (isset($_GET['fim']) && count(explode("/", $_GET['fim']))==3):
+if (isset($_GET['fim']) && count(explode("-", $_GET['fim']))==3):
     $fim = strtotime($_GET['fim'].' 00:00:00');
 else:
     $fim = time();
@@ -40,7 +40,7 @@ $agregacoes = $db->search([
                     "field"=> "timestamp",
                     "format"=> "MM-yyy",
                     "ranges"=> [
-                        [ "from"=> $inicio*1000, "to"=> $fim*1000 ] 
+                        [ "from"=> $inicio*1000, "to"=> ($fim+24*60*60)*1000 ] 
                     ]
                 ],
                 "aggs"=>[
