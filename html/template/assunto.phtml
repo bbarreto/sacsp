@@ -71,7 +71,7 @@ function initMap() {
   });
 
   var ctaLayer = new google.maps.KmlLayer({
-    url: '/assunto.php?output=kml&assunto=<?php print urlencode($_GET['assunto']) ?>&inicio=<?php print $inicio ?>&fim=<?php print $fim?>',
+    url: '//<?php print $_SERVER['SERVER_NAME'] ?>/assunto.php?output=kml&assunto=<?php print urlencode($_GET['assunto']) ?>&inicio=<?php print $inicio ?>&fim=<?php print $fim?>',
     map: map
   });
 }
