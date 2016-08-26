@@ -7,24 +7,30 @@
       </div>
     </div>
 
-  <div class="row m-b-2">
-    <div class="col-sm-12">
-      <form class="form form-inline" method="get" action="/assunto.php">
-        <input type="hidden" name="assunto" value="<?php print htmlentities($_GET["assunto"], ENT_QUOTES, 'utf-8') ?>">
-        <div class="form-group">
-          <label>Data de início:</label>
-          <input type="date" name="inicio" class="form-control" value="<?php print date('Y-m-d', $inicio) ?>">
-        </div>
-        <div class="form-group">
-          <label>Data de fim:</label>
-          <input type="date" name="fim" class="form-control" value="<?php print date('Y-m-d', $fim) ?>">
-        </div>
-        <div class="form-group">
-          <button type="submit" class="btn btn-primary">Visualizar</button>
-        </div>
-      </form>
+    <div class="row m-b-2">
+      <div class="col-sm-12">
+        <form class="form form-inline" method="get" action="/assunto.php">
+          <input type="hidden" name="assunto" value="<?php print htmlentities($_GET["assunto"], ENT_QUOTES, 'utf-8') ?>">
+          <div class="form-group">
+            <label>Data de início:</label>
+            <input type="date" name="inicio" class="form-control" value="<?php print date('Y-m-d', $inicio) ?>">
+          </div>
+          <div class="form-group">
+            <label>Data de fim:</label>
+            <input type="date" name="fim" class="form-control" value="<?php print date('Y-m-d', $fim) ?>">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">Visualizar</button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
+
+    <div class="row m-b-2">
+      <div class="col-xs-12">
+        <div id="map" style="height:400px;"></div>
+      </div>
+    </div>
 
     <div class="row">
       <div class="col-xs-12">
@@ -57,6 +63,19 @@ new Chartist.Bar('.solicitacoes_por_subprefeitura', {
   }, {
     height: '250px'
 });
+
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 10,
+    center: {lng: -46.6532, lat: -23.5165}
+  });
+
+  var ctaLayer = new google.maps.KmlLayer({
+    url: '/assunto.php?output=kml&assunto=<?php print urlencode($_GET['assunto']) ?>&inicio=<?php print $inicio ?>&fim=<?php print $fim?>',
+    map: map
+  });
+}
 </script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?callback=initMap"></script>
 
 <?php include("footer.phtml"); ?>

@@ -91,5 +91,12 @@ foreach(['graphDays', 'graphSubprefeitura'] as $grafico):
     endforeach;
 endforeach;
 
+if (isset($_GET['output']) && $_GET['output']=='kml'):
 
-include 'template/assunto.phtml';
+    $max = max($graficos['graphSubprefeitura']['values']);
+    
+    include 'template/assunto_kml.phtml';
+
+else:
+    include 'template/assunto.phtml';
+endif;

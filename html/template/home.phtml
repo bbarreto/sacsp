@@ -1,6 +1,6 @@
 <?php include("header.phtml"); ?>
 
-  <div class="alert alert-info" role="alert">
+  <div class="alert alert-info text-xs-center" role="alert">
   Contabilizando <?php print number_format($agregacoes['hits']['total'], 0, ",", ".") ?> solicitações entre
   <?php print date("d/m/Y H\hi", strtotime($data_minima['hits']['hits'][0]['_source']['timestamp'])) ?> até 
   <?php print date("d/m/Y H\hi", strtotime($agregacoes['hits']['hits'][0]['_source']['timestamp'])) ?>.
