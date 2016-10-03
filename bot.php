@@ -166,6 +166,8 @@ while ($solicitacao_id>0):
 	//consulta impressao
 	$impressao = call('http://sac.prefeitura.sp.gov.br/Consulta_Numero.asp', 'GET', [
 		'txtSolNum'=>$solicitacao_id
+	], [
+		'User-Agent'=>'sacsp.info'
 	]);
 
 	$impressao = utf8_encode($impressao);
