@@ -382,7 +382,7 @@
 				<width>2</width>
 			</LineStyle>
 			<PolyStyle>
-				<color>#<?php print dechex($graficos['graphSubprefeitura']['values'][$k]/$max*180); ?>0000ff</color>
+				<color>#<?php print sprintf('%02X', $graficos['graphSubprefeitura']['values'][$k]/$max*180) ?>0000ff</color>
 				<fill>1</fill>
 				<outline>1</outline>
 			</PolyStyle>
