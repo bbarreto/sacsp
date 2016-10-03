@@ -28,13 +28,14 @@
     <div class="col-md-6" id="topAssuntos">
       <table class="table table-hover">
         <thead class="thead-inverse">
-          <tr><th colspan=2>Top Assuntos</th></tr>
+          <tr><th colspan=3>Top Assuntos</th></tr>
         </thead>
         <tbody>
           <?php foreach($agregacoes['aggregations']['intervalo']['buckets'][0]['assunto']['buckets'] as $assunto): ?>
           <tr>
             <td class="titulo"><a href="/assunto.php?assunto=<?php print urlencode($assunto['key']) ?>"><?php print $assunto['key'] ?></a></td>
             <td class="total"><?php print number_format($assunto['doc_count'], 0, ",", ".") ?></td>
+            <td class="porcentagem"><?php print number_format($assunto['doc_count']/$agregacoes['hits']['total']*100, 2, ".","") ?>%</td>
           </tr>
           <?php endforeach; ?>
         </tbody>
@@ -44,13 +45,14 @@
     <div class="col-md-6" id="topSubprefeituras">
       <table class="table table-hover">
          <thead class="thead-inverse">
-          <tr><th colspan=2>Top Subprefeituras</th></tr>
+          <tr><th colspan=3>Top Subprefeituras</th></tr>
         </thead>
         <tbody>
         <?php foreach($agregacoes['aggregations']['intervalo']['buckets'][0]['subprefeitura']['buckets'] as $subprefeitura): ?>
         <tr>
           <td class="titulo"><a href="/detalhe.php?subprefeitura=<?php print urlencode($subprefeitura['key']) ?>"><?php print isset($subprefeituras_keys[$subprefeitura['key']])?$subprefeituras_keys[$subprefeitura['key']]:$subprefeitura['key']?></a></td>
           <td class="total"><?php print number_format($subprefeitura['doc_count'], 0, ",", ".") ?></td>
+          <td class="porcentagem"><?php print number_format($subprefeitura['doc_count']/$agregacoes['hits']['total']*100, 2, ".","") ?>%</td>
         </tr>
         <?php endforeach; ?>
         </tbody>
@@ -63,13 +65,14 @@
     <div class="col-md-6" id="topOrgaos">
       <table class="table table-hover">
            <thead class="thead-inverse">
-            <tr><th colspan=2>Top órgãos</th></tr>
+            <tr><th colspan=3>Top órgãos</th></tr>
           </thead>
           <tbody>
             <?php foreach($agregacoes['aggregations']['intervalo']['buckets'][0]['orgao']['buckets'] as $orgao): ?>
             <tr>
               <td class="titulo"><a href="/detalhe.php?orgao=<?php print urlencode($orgao['key']) ?>"><?php print $orgao['key'] ?></a></td>
               <td class="total"><?php print number_format($orgao['doc_count'], 0, ",", ".") ?></td>
+              <td class="porcentagem"><?php print number_format($orgao['doc_count']/$agregacoes['hits']['total']*100, 2, ".","") ?>%</td>
             </tr>
             <?php endforeach; ?>
           </tbody>
@@ -79,12 +82,18 @@
     <div class="col-md-6" id="topCanais">
       <table class="table table-hover">
            <thead class="thead-inverse">
-            <tr><th colspan=2>Canais de entrada</th></tr>
+            <tr><th colspan=3>Canais de entrada</th></tr>
           </thead>
           <tbody>
             <?php foreach($agregacoes['aggregations']['intervalo']['buckets'][0]['canal']['buckets'] as $canais): ?>
             <tr>
               <td class="titulo"><a href="/detalhe.php?canal=<?php print urlencode($canais['key']) ?>"><?php print $canais['key'] ?></a></td>
+              <td class="grafico">
+                <span class="graph">
+                  <span style="width: <?php print number_format($canais['doc_count']/$agregacoes['hits']['total']*100, 2, ".","") ?>%" class="inner"></span>
+                  <span class="abs"><?php print number_format($canais['doc_count']/$agregacoes['hits']['total']*100, 2, ".","") ?>%</span>
+                </span>
+              </td>
               <td class="total"><?php print number_format($canais['doc_count'], 0, ",", ".") ?></td>
             </tr>
             <?php endforeach; ?>
